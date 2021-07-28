@@ -209,7 +209,25 @@ extension CentralTableViewController: CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        <#code#>
+        if let error = error {
+            print("didDiscoverServices: \(error)")
+            manager.cancelPeripheralConnection(peripheral) //失敗就把連線取消
+            return
+        }
+        
+        guard let characteristics = service.characteristics else {
+            assertionFailure("Invalid characteristics")
+            return
+        }
+        
+        //...
+        
+        // Next Step
+        if willDiscoverServices.isEmpty {
+            // All done!
+        } else {
+            handleNextService(of: peripheral)
+        }
     }
     
     func handleNextService(of peripheral: CBPeripheral) {
