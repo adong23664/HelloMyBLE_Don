@@ -203,6 +203,7 @@ extension CentralTableViewController: CBPeripheralDelegate {
 //        for service in services {
 //            peripheral.discoverCharacteristics(nil, for: service)
 //        }
+        info = "**** Service: \(services.count)\n"
         
         willDiscoverServices = services
         handleNextService(of: peripheral)
@@ -219,12 +220,16 @@ extension CentralTableViewController: CBPeripheralDelegate {
             assertionFailure("Invalid characteristics")
             return
         }
-        
-        //...
+        info += "** Service: \(service.uuid.uuidString):\(characteristics.count)\n"
+        for ch in characteristics {
+            info += "* CH: \(ch.uuid.uuidString)\n"
+        }
         
         // Next Step
         if willDiscoverServices.isEmpty {
             // All done!
+            showAlert(message: info)
+            manager.cancelPeripheralConnection(peripheral)
         } else {
             handleNextService(of: peripheral)
         }
