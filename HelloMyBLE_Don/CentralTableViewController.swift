@@ -16,6 +16,12 @@ class CentralTableViewController: UITableViewController{
     
     var willDiscoverServices = [CBService]()
     var info = ""
+    
+    
+    let targetServiceUUID = CBUUID(string: "8888")
+    let targetCharUUID = CBUUID(string: "8889")
+    var shouldTalkingAfterFound = false
+    var talkingChar: CBCharacteristic?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +34,17 @@ class CentralTableViewController: UITableViewController{
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Disconnect when we return from TalkingVC
+        if let characteristic = talkingChar {
+            let peripheral = characteristic.service.peripheral
+            if peripheral.state == .connected {
+                manager.cancelPeripheralConnection(peripheral)
+            }
+            talkingChar = nil // Clean up!
+        }
+    }
     
     @IBAction func scanEnableValueChange(_ sender: UISwitch) {
         if sender.isOn {
@@ -72,14 +89,21 @@ class CentralTableViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //...
+        //1
+        shouldTalkingAfterFound = true
+        let item = getItem(at: indexPath)
+        manager.connect(item.peripheral, options: nil)
+        //2
     }
     
     
     //讓app開始連接peripheral
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        //1
+        shouldTalkingAfterFound = false
         let item = getItem(at: indexPath)
         manager.connect(item.peripheral, options: nil)
+        //2
     }
     
     func getItem(at indexPath: IndexPath) -> DiscoveredItem {
@@ -123,15 +147,19 @@ class CentralTableViewController: UITableViewController{
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        
+        if let vc = segue.destination as? TalkingViewController {
+            vc.talkingChar = talkingChar
+        }
     }
-    */
+    
 
 }
 
@@ -173,11 +201,13 @@ extension CentralTableViewController: CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        //3
         print("didConnect: \(peripheral.identifier)")
         stopScanning()
         
         peripheral.delegate = self
         peripheral.discoverServices(nil) //回報所有services
+        //4
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -190,13 +220,17 @@ extension CentralTableViewController: CBCentralManagerDelegate {
 
 extension CentralTableViewController: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        //5
         if let error = error {
             print("didDiscoverServices: \(error)")
             manager.cancelPeripheralConnection(peripheral) //失敗就把連線取消
+            //6a
             return
         }
+        //6b
         guard  let services = peripheral.services else {
             assertionFailure("Fail to get services.")
+            
             return
         }
         
@@ -204,18 +238,22 @@ extension CentralTableViewController: CBPeripheralDelegate {
 //            peripheral.discoverCharacteristics(nil, for: service)
 //        }
         info = "**** Service: \(services.count)\n"
-        
+        //7
         willDiscoverServices = services
         handleNextService(of: peripheral)
+        //10
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        //11
+        //18
         if let error = error {
             print("didDiscoverServices: \(error)")
             manager.cancelPeripheralConnection(peripheral) //失敗就把連線取消
+            //12a
             return
         }
-        
+        //12b
         guard let characteristics = service.characteristics else {
             assertionFailure("Invalid characteristics")
             return
@@ -223,26 +261,38 @@ extension CentralTableViewController: CBPeripheralDelegate {
         info += "** Service: \(service.uuid.uuidString):\(characteristics.count)\n"
         for ch in characteristics {
             info += "* CH: \(ch.uuid.uuidString)\n"
+            if shouldTalkingAfterFound && ch.uuid == targetCharUUID {
+                talkingChar = ch
+                performSegue(withIdentifier: "goTalking", sender: nil)
+                return  //important
+            }
         }
         
+        //13
         // Next Step
         if willDiscoverServices.isEmpty {
             // All done!
+            //14a
             showAlert(message: info)
             manager.cancelPeripheralConnection(peripheral)
+            //15a -->End
         } else {
+            //14b
             handleNextService(of: peripheral)
+            //17
         }
     }
     
     func handleNextService(of peripheral: CBPeripheral) {
-        
+        //8
+        //15b
         guard let service = willDiscoverServices.first else {
             return
         }
         willDiscoverServices.removeFirst()
         peripheral.discoverCharacteristics(nil, for: service)
-        
+        //9
+        //16
     }
 }
 

@@ -9,20 +9,54 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Talking View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HelloMyBLE_Don" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="TalkingViewController" customModule="HelloMyBLE_Don" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nt5-X8-S3t">
+                                <rect key="frame" x="20" y="105" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="oSc-iL-iJW">
+                                <rect key="frame" x="0.0" y="144" width="414" height="669"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="oSc-iL-iJW" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="5c6-U9-bjW"/>
+                            <constraint firstItem="oSc-iL-iJW" firstAttribute="top" secondItem="nt5-X8-S3t" secondAttribute="bottom" constant="5" id="Aoi-Be-giU"/>
+                            <constraint firstItem="nt5-X8-S3t" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="NmB-1e-8ch"/>
+                            <constraint firstItem="nt5-X8-S3t" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="17" id="V5F-0U-WUU"/>
+                            <constraint firstItem="oSc-iL-iJW" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="iVj-4E-WhJ"/>
+                            <constraint firstItem="oSc-iL-iJW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="m6x-uB-CCw"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nt5-X8-S3t" secondAttribute="trailing" constant="20" id="sNI-D2-dv1"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="N1c-Sp-wVs">
+                        <barButtonItem key="rightBarButtonItem" title="send" id="gbp-Yp-U6n">
+                            <connections>
+                                <action selector="sendBtnPressed:" destination="BYZ-38-t0r" id="coR-VM-4gZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="inputTextField" destination="nt5-X8-S3t" id="kMR-gT-jeA"/>
+                        <outlet property="logTextView" destination="oSc-iL-iJW" id="T1Q-Fq-wnw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="819" y="814"/>
+            <point key="canvasLocation" x="3953.6231884057975" y="-285.26785714285711"/>
         </scene>
         <!--Central-->
         <scene sceneID="RCb-0o-DgE">
@@ -74,6 +108,9 @@
                             </switch>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goTalking" id="hdU-pi-SIv"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cW6-RK-jeG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -96,21 +133,63 @@
             </objects>
             <point key="canvasLocation" x="1893" y="-285"/>
         </scene>
-        <!--Peripheral-->
+        <!--Peripheral View Controller-->
         <scene sceneID="tZT-pv-k1h">
             <objects>
-                <viewController id="kWh-dF-D87" sceneMemberID="viewController">
+                <viewController id="kWh-dF-D87" customClass="PeripheralViewController" customModule="HelloMyBLE_Don" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dQg-3R-HfU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aik-Wf-JSI">
+                                <rect key="frame" x="20" y="105" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EnM-fj-e87">
+                                <rect key="frame" x="0.0" y="144" width="414" height="669"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="mxx-dU-0c5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="mxx-dU-0c5" firstAttribute="trailing" secondItem="aik-Wf-JSI" secondAttribute="trailing" constant="20" id="5qc-h3-0lb"/>
+                            <constraint firstItem="mxx-dU-0c5" firstAttribute="trailing" secondItem="EnM-fj-e87" secondAttribute="trailing" id="CIH-NU-wlM"/>
+                            <constraint firstItem="EnM-fj-e87" firstAttribute="leading" secondItem="mxx-dU-0c5" secondAttribute="leading" id="b7t-Cf-Nln"/>
+                            <constraint firstItem="aik-Wf-JSI" firstAttribute="leading" secondItem="mxx-dU-0c5" secondAttribute="leading" constant="20" id="h0i-7U-gxj"/>
+                            <constraint firstItem="mxx-dU-0c5" firstAttribute="bottom" secondItem="EnM-fj-e87" secondAttribute="bottom" id="rfb-Zj-7kJ"/>
+                            <constraint firstItem="aik-Wf-JSI" firstAttribute="top" secondItem="mxx-dU-0c5" secondAttribute="top" constant="17" id="vLR-Be-kUF"/>
+                            <constraint firstItem="EnM-fj-e87" firstAttribute="top" secondItem="aik-Wf-JSI" secondAttribute="bottom" constant="5" id="wgN-Ev-5ga"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Peripheral" id="wxo-SC-to7"/>
+                    <navigationItem key="navigationItem" id="su3-eU-vZd">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="VAj-8T-Y5V">
+                            <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="suG-Ew-Yc8">
+                                <rect key="frame" x="20" y="6.5" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="startAdvertisingValueChanged:" destination="kWh-dF-D87" eventType="valueChanged" id="H5j-Ho-bTW"/>
+                                </connections>
+                            </switch>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="send" id="4vw-cK-PcF">
+                            <connections>
+                                <action selector="sendBtnPressed:" destination="kWh-dF-D87" id="IuR-Bg-luV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="inputTextField" destination="aik-Wf-JSI" id="PTg-dp-bnJ"/>
+                        <outlet property="logTextView" destination="EnM-fj-e87" id="XpD-2j-ZM5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17E-ec-KGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1923" y="378"/>
+            <point key="canvasLocation" x="2830.434782608696" y="377.67857142857139"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="JQx-LQ-mz5">
@@ -123,15 +202,37 @@
                     </tabBar>
                     <connections>
                         <segue destination="R6j-jb-c4P" kind="relationship" relationship="viewControllers" id="ZaX-5U-jWM"/>
-                        <segue destination="kWh-dF-D87" kind="relationship" relationship="viewControllers" id="Yst-d9-N3t"/>
+                        <segue destination="59m-rt-pxU" kind="relationship" relationship="viewControllers" id="Yst-d9-N3t"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WRx-eg-cEd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="819" y="-43"/>
         </scene>
+        <!--Peripheral-->
+        <scene sceneID="4wj-kS-prf">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="59m-rt-pxU" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Peripheral" id="wxo-SC-to7"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FqM-tf-VNP">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="kWh-dF-D87" kind="relationship" relationship="rootViewController" id="DIx-Ee-Vkl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1OF-pp-sZ8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1921.7391304347827" y="377.67857142857139"/>
+        </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
